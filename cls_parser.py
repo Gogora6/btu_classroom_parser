@@ -16,11 +16,13 @@ request_url = f"https://classroom.btu.edu.ge/ge/student/me/courses"
 
 
 conf = yaml.load(open('conf/application.yml'))
-username = conf['user']['email']
-password = conf['user']['password']
 
+payload = {'username': conf['user']['email'],
+			'password': conf['user']['password']}
 
-payload = {'username': username, 'password': password}
+@app.errorhandler(404)
+def page_not_found(e):
+    return 'go for /scores, /detailed_scores or /messages ', 404
 
 @app.route('/scores', methods=['GET'])
 def scores():
@@ -29,9 +31,9 @@ def scores():
 		result = only_course_names(soup)
 
 		scores = [{'score': v, 'course_name': k} for k,v in result.items() ]
-		return jsonify(scores)
+		return jsonify(scores), 200
 	except:
-		return 'No information'
+		return 'No information', 400
 
 
 @app.route('/detailed_scores', methods=['GET'])
@@ -42,9 +44,9 @@ def detailed_scores():
 
 		scores = [{'course_info': v, 'course_name': k} for k,v in result.items() ]
 
-		return jsonify(scores)
+		return jsonify(scores), 200
 	except:
-		return 'No information'
+		return 'No information', 400
 
 
 @app.route('/messages', methods=['GET'])
@@ -53,9 +55,9 @@ def messages_full():
 		messages_data = messages(post_login_url, payload)
 
 		messages_data = [{'id': k, 'content': v} for k,v in messages_data.items() ]
-		return jsonify(messages_data)
+		return jsonify(messages_data), 200
 	except:
-		return 'No information'
+		return 'No information', 400
 
 
 if __name__ == '__main__':
