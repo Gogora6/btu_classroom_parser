@@ -3,8 +3,10 @@
 Btu classroom parser RESTFULL API, Powered by flask.
 
 ## Installation
+To install just run - pip install -r requirements.txt
 
 For use, Change conf/application.yml file with your login credentials.
+
 Then, Start API With:
 ![alt text](https://i.imgur.com/umscyD0.png)
 
